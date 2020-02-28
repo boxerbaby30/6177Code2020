@@ -13,6 +13,8 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 /**
  * Add your docs here.
  */
@@ -46,5 +48,10 @@ public class Drivetrain {
         double right = zRotation + xSpeed;
         leftPID.setReference(left, ControlType.kDutyCycle);
         rightPID.setReference(right, ControlType.kDutyCycle);
+    }
+
+    public void printTelemetry(){
+        SmartDashboard.putNumber("Drivetrain Left Distance", leftEncoder.getPosition());
+        SmartDashboard.putNumber("Drivetrain Right Distance", rightEncoder.getPosition());
     }
 }
