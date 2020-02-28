@@ -9,7 +9,6 @@ package frc.robot;
 
 import ControlUtil.MasterControl;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.RobotMap;
 
 /**
@@ -30,10 +29,12 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     bMap = new RobotMap();
     control = new MasterControl(bMap);
+    bMap.hopper.start();
   }
 
   @Override
   public void robotPeriodic() {
+    if(!bMap.hopper.isAlive()){bMap.hopper.start();}
   }
 
   @Override

@@ -24,25 +24,18 @@ public class MasterControl {
        //this.bMap.Drive.TeleopDrive(this.bMap.Xstick.getRawAxis(2), this.bMap.Xstick.getRawAxis(5));
        if(this.bMap.Xstick.getRawButton(1)){
            //intaking
-           this.bMap.hopper.intaking(true);
-           this.bMap.hopper.outtaking(false);
-           this.bMap.hopper.shooting(false);
+           this.bMap.hopper.setState(State.Intake);
        }
        else if(this.bMap.Xstick.getRawButton(2)){
            //outtaking
-           this.bMap.hopper.outtaking(true);
-           this.bMap.hopper.shooting(false);
-           this.bMap.hopper.intaking(false);
+           this.bMap.hopper.setState(State.Outtake);
        }
        else if(this.bMap.Xstick.getRawButton(3)){
            //shooting
-           this.bMap.hopper.shooting(true);
-           this.bMap.hopper.outtaking(false);
-           this.bMap.hopper.intaking(false);
+           this.bMap.hopper.setState(State.Shooting);
        }
        else{
-           System.out.println("idle");
-           this.bMap.hopper.zero();
+           this.bMap.hopper.setState(State.Idle);
        }
    }
 }
