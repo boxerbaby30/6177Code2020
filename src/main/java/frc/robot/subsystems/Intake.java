@@ -25,7 +25,7 @@ public class Intake {
 
   }
   
-    (talon name).setSpeed(.7)
+    (TalonSRX).setSpeed(.7)
 
 
 }
