@@ -6,6 +6,7 @@
 /*----------------------------------------------------------------------------*/
 
 package ControlUtil;
+
 import frc.robot.subsystems.RobotMap;
 import frc.robot.subsystems.Hopper.State;
 
@@ -26,10 +27,16 @@ public class MasterControl {
        if(this.bMap.Xstick.getRawButton(1)){
            //intaking
            this.bMap.hopper.setState(State.Intake);
+           this.bMap.intake.down();
+           this.bMap.intake.in();
+           this.bMap.shooter.set(0);
        }
        else if(this.bMap.Xstick.getRawButton(2)){
            //outtaking
+           this.bMap.shooter.set(0);
            this.bMap.hopper.setState(State.Outtake);
+           this.bMap.intake.down();
+           this.bMap.intake.out();
        }
        else if(this.bMap.Xstick.getRawButton(3)){
            //shooting
@@ -39,9 +46,14 @@ public class MasterControl {
            } else {
                this.bMap.hopper.setState(State.Idle);
            }
-       }
-       else{
+           this.bMap.hopper.setState(State.Shooting);
+           this.bMap.intake.up();
+           this.bMap.intake.stop();
+       } else{
+           this.bMap.shooter.set(0);
            this.bMap.hopper.setState(State.Idle);
+           this.bMap.intake.up();
+           this.bMap.intake.stop();
        }
    }
 }
