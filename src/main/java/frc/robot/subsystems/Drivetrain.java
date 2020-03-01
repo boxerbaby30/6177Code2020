@@ -12,7 +12,6 @@ import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -28,8 +27,10 @@ public class Drivetrain {
     private double rP, rI, rD, rF, rIzone;
     private double kMax, kMin;
     private double kMaxVel, kMinVel, kMaxAcc, allowedErr;
+    
     private int smartMotionSlot = 0;
-
+    private double gearRatio = 12.755;
+    private double wheelSize = 6.0;
 
     public Drivetrain(){
         leftFollower = new CANSparkMax(3, MotorType.kBrushless);
@@ -37,17 +38,26 @@ public class Drivetrain {
         leftFollower.restoreFactoryDefaults();
         leftMaster.restoreFactoryDefaults();
         leftFollower.follow(leftMaster);
+        leftMaster.setSmartCurrentLimit(40);
+        leftFollower.setSmartCurrentLimit(40);
         leftPID = leftMaster.getPIDController();
         leftEncoder = leftMaster.getEncoder();
+
         rightFollower = new CANSparkMax(4, MotorType.kBrushless);
         rightMaster = new CANSparkMax(2, MotorType.kBrushless);
         rightFollower.restoreFactoryDefaults();
         rightMaster.restoreFactoryDefaults();
         rightFollower.follow(rightMaster);
+        rightMaster.setSmartCurrentLimit(40);
+        rightFollower.setSmartCurrentLimit(40);
         rightPID = rightMaster.getPIDController();
         rightEncoder = rightMaster.getEncoder();
+
         leftMaster.setInverted(false);
         rightMaster.setInverted(true);
+
+        leftEncoder.setPositionConversionFactor(Math.PI*wheelSize/gearRatio);//Inches
+        leftEncoder.setVelocityConversionFactor(Math.PI*wheelSize/(12*gearRatio*60));//FPS
 
         lP = 0.0;
         lI = 0.0;
@@ -64,10 +74,10 @@ public class Drivetrain {
         kMax = 1;
         kMin = -1;
 
-        kMaxVel = 0;
-        kMinVel = 0;
-        kMaxAcc = 0;
-        allowedErr = 0;
+        kMaxVel = 12;
+        kMinVel = 0.01;
+        kMaxAcc = 5700/1.5;
+        allowedErr = 0.02;
 
         leftPID.setP(lP);
         leftPID.setI(lI);
@@ -96,15 +106,23 @@ public class Drivetrain {
     }
 
     public void TeleopDrive(double xSpeed, double zRotation) {
-        double left = xSpeed - zRotation;
-        double right = zRotation + xSpeed;
-        leftPID.setReference(left, ControlType.kSmartVelocity);
-        rightPID.setReference(right, ControlType.kSmartVelocity);
+        double left = (xSpeed - zRotation) * kMaxVel;
+        double right = (zRotation + xSpeed) * kMaxVel;
+        leftPID.setReference(left, ControlType.kDutyCycle);
+        rightPID.setReference(right, ControlType.kDutyCycle);
     }
     public double getLeftVel(){ return(leftEncoder.getVelocity()); }
     public double getRightVel(){ return(rightEncoder.getVelocity()); }
+    public double getLeftDist(){ return(leftEncoder.getPosition()); }
+    public double getRightDist(){ return(rightEncoder.getPosition()); }
     public void printTelemetry(){
         SmartDashboard.putNumber("Left Drivetrain Velocity", getLeftVel());
         SmartDashboard.putNumber("Right Drivetrain Velocity", getRightVel());
+        SmartDashboard.putNumber("Left Drivetrain Velocity", getLeftDist());
+        SmartDashboard.putNumber("Right Drivetrain Velocity", getRightDist());
+    }
+    public void ZeroEncoders(){
+        leftEncoder.setPositionConversionFactor(0.0);
+        rightEncoder.setPosition(0.0);
     }
 }
