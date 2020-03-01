@@ -53,6 +53,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     control.Teleop();
     bMap.hopper.printTelemtry();
+    bMap.shooter.printTelemetry();
   }
 
   @Override
