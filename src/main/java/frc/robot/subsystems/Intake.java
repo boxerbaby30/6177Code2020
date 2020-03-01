@@ -24,7 +24,6 @@ public class Intake {
     inMotor = new WPI_TalonSRX(1);
     this.pumpThing = new DoubleSolenoid(2, 1);
     this.pumpThing.set(Value.kForward);
-    inMotor.setInverted(false);
   }
 
   public void up() {
@@ -45,9 +44,5 @@ public class Intake {
 
   public void stop(){
     this.inMotor.set(0.0);
-  }
-  
-  public void close(){
-    this.pumpThing.close();
   }
 }
