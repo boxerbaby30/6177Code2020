@@ -6,6 +6,7 @@
 /*----------------------------------------------------------------------------*/
 
 package ControlUtil;
+
 import frc.robot.subsystems.RobotMap;
 import frc.robot.subsystems.Hopper.State;
 
@@ -21,28 +22,38 @@ public class MasterControl {
    }
    
    public void Teleop() {
+       double rpm = 3000;
        //this.bMap.Drive.TeleopDrive(this.bMap.Xstick.getRawAxis(2), this.bMap.Xstick.getRawAxis(5));
        if(this.bMap.Xstick.getRawButton(1)){
            //intaking
-           this.bMap.hopper.intaking(true);
-           this.bMap.hopper.outtaking(false);
-           this.bMap.hopper.shooting(false);
+           this.bMap.hopper.setState(State.Intake);
+           this.bMap.intake.down();
+           this.bMap.intake.in();
+           this.bMap.shooter.set(0);
        }
        else if(this.bMap.Xstick.getRawButton(2)){
            //outtaking
-           this.bMap.hopper.outtaking(true);
-           this.bMap.hopper.shooting(false);
-           this.bMap.hopper.intaking(false);
+           this.bMap.shooter.set(0);
+           this.bMap.hopper.setState(State.Outtake);
+           this.bMap.intake.down();
+           this.bMap.intake.out();
        }
        else if(this.bMap.Xstick.getRawButton(3)){
            //shooting
-           this.bMap.hopper.shooting(true);
-           this.bMap.hopper.outtaking(false);
-           this.bMap.hopper.intaking(false);
-       }
-       else{
-           System.out.println("idle");
-           this.bMap.hopper.zero();
+           this.bMap.shooter.set(rpm);
+           if(this.bMap.shooter.ready(rpm)){
+               this.bMap.hopper.setState(State.Shooting);
+           } else {
+               this.bMap.hopper.setState(State.Idle);
+           }
+           this.bMap.hopper.setState(State.Shooting);
+           this.bMap.intake.up();
+           this.bMap.intake.stop();
+       } else{
+           this.bMap.shooter.set(0);
+           this.bMap.hopper.setState(State.Idle);
+           this.bMap.intake.up();
+           this.bMap.intake.stop();
        }
    }
 }

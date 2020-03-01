@@ -29,10 +29,12 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     bMap = new RobotMap();
     control = new MasterControl(bMap);
+    bMap.hopper.start();
   }
 
   @Override
   public void robotPeriodic() {
+    if(!bMap.hopper.isAlive()){bMap.hopper.start();}
   }
 
   @Override
@@ -51,7 +53,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     control.Teleop();
     bMap.hopper.printTelemtry();
-    bMap.hopper.printTelemtry();
+    bMap.shooter.printTelemetry();
   }
 
   @Override
