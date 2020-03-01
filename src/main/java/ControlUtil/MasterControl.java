@@ -21,6 +21,7 @@ public class MasterControl {
    }
    
    public void Teleop() {
+       double rpm = 3000;
        //this.bMap.Drive.TeleopDrive(this.bMap.Xstick.getRawAxis(2), this.bMap.Xstick.getRawAxis(5));
        if(this.bMap.Xstick.getRawButton(1)){
            //intaking
@@ -32,7 +33,12 @@ public class MasterControl {
        }
        else if(this.bMap.Xstick.getRawButton(3)){
            //shooting
-           this.bMap.hopper.setState(State.Shooting);
+           this.bMap.shooter.set(rpm);
+           if(this.bMap.shooter.ready(rpm)){
+               this.bMap.hopper.setState(State.Shooting);
+           } else {
+               this.bMap.hopper.setState(State.Idle);
+           }
        }
        else{
            this.bMap.hopper.setState(State.Idle);

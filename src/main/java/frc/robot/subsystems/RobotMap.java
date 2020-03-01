@@ -16,11 +16,13 @@ public class RobotMap {
     public XboxController Xstick;
     public Drivetrain Drive;
     public Hopper hopper;
+    public Shooter shooter;
 
     public RobotMap(){
         this.Xstick = new XboxController(0);
         this.Drive = new Drivetrain();
         this.hopper = new Hopper();
+        this.shooter = new Shooter();
     }
 
 }
