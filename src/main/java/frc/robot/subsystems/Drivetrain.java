@@ -101,15 +101,8 @@ public class Drivetrain {
         leftPID.setReference(left, ControlType.kSmartVelocity);
         rightPID.setReference(right, ControlType.kSmartVelocity);
     }
-
-    public double getLeftVel(){
-        return(leftEncoder.getVelocity());
-    }
-
-    public double getRightVel(){
-        return(rightEncoder.getVelocity());
-    }
-
+    public double getLeftVel(){ return(leftEncoder.getVelocity()); }
+    public double getRightVel(){ return(rightEncoder.getVelocity()); }
     public void printTelemetry(){
         SmartDashboard.putNumber("Left Drivetrain Velocity", getLeftVel());
         SmartDashboard.putNumber("Right Drivetrain Velocity", getRightVel());

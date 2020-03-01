@@ -9,7 +9,6 @@ package frc.robot;
 
 import ControlUtil.MasterControl;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.RobotMap;
 
 /**
