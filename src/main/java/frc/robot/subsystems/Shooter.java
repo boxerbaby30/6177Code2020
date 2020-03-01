@@ -23,7 +23,7 @@ public class Shooter {
     private CANEncoder enc;
     private CANPIDController pid;
     private final double err = 0.01;
-    private double kP = 0;
+    private double kP = 0.71;
     private double kI = 0;
     private double kD = 0;
     private double kF = 0.00017241;
