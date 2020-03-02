@@ -14,8 +14,6 @@ import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 /**
  * Add your docs here.
  */
@@ -55,11 +53,11 @@ public class Drivetrain {
         rightPID = rightMaster.getPIDController();
         rightEncoder = rightMaster.getEncoder();
 
-        leftMaster.setInverted(false);
-        rightMaster.setInverted(true);
+        leftMaster.setInverted(true);
+        rightMaster.setInverted(false);
 
-        leftEncoder.setPositionConversionFactor(Math.PI*wheelSize/gearRatio);//Inches
-        leftEncoder.setVelocityConversionFactor(Math.PI*wheelSize/(12*gearRatio*60));//FPS
+        //leftEncoder.setPositionConversionFactor(Math.PI*wheelSize/gearRatio);//Inches
+        //leftEncoder.setVelocityConversionFactor(Math.PI*wheelSize/(12*gearRatio*60));//FPS
 
         lP = 0.0;
         lI = 0.0;
@@ -108,8 +106,10 @@ public class Drivetrain {
     }
 
     public void TeleopDrive(double xSpeed, double zRotation) {
-        double left = (xSpeed - zRotation) * kMaxVel;
-        double right = (zRotation + xSpeed) * kMaxVel;
+        double left = xSpeed - zRotation;
+        double right = zRotation + xSpeed;
+        if(Math.abs(left) < 0.09){left = 0;}
+        if(Math.abs(right) < 0.09){right = 0;}
         leftPID.setReference(left, ControlType.kDutyCycle);
         rightPID.setReference(right, ControlType.kDutyCycle);
     }

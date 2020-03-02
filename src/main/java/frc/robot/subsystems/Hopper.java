@@ -21,7 +21,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 public class Hopper extends Thread{
     private VictorSPX topBelt, bottomBelt, roller;
     private DutyCycleEncoder topEnc, bottomEnc;
-    private DigitalInput entrance;
+    private DigitalInput entrance, exit;
     private final double DPR = Math.PI * 1.88;
     private static int ballCounter;
     private State state;
@@ -45,6 +45,7 @@ public class Hopper extends Thread{
         topEnc = new DutyCycleEncoder(0);
         bottomEnc = new DutyCycleEncoder(1);
         entrance = new DigitalInput(2);
+        exit = new DigitalInput(3);
 
         ballCounter = 0;
         state = State.Idle;
@@ -92,8 +93,14 @@ public class Hopper extends Thread{
         bottomBelt.set(ControlMode.PercentOutput, 0);
         resetDistance();
     }
-    public boolean isFull(){return (entrance.get() && ballCounter == 4);}
-    public boolean isEmpty(){return (!entrance.get() && ballCounter == 0);}
+    public boolean isFull(){
+        boolean full = entrance.get() && exit.get();
+        if(full){ ballCounter = 5; }
+        return(full);
+    }
+    public boolean isEmpty(){
+        return (!entrance.get() && !exit.get() && ballCounter == 0);
+    }
     public void run(){
         State s = State.Idle;
         while(true){
@@ -102,7 +109,7 @@ public class Hopper extends Thread{
                     synchronized(this){ s = this.state; }
                 }
                 SmartDashboard.putString("State", s.toString());
-                if(/*ballCounter <= 4 &&*/ s == State.Intake){
+                if(!exit.get() && s == State.Intake){
                     System.out.println("intaking");
                     if(entrance.get()){activate();}
                     roller.set(ControlMode.PercentOutput, 0.5);

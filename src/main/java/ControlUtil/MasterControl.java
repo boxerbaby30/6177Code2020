@@ -23,7 +23,10 @@ public class MasterControl {
    
    public void Teleop() {
        double rpm = 3000;
-       //this.bMap.Drive.TeleopDrive(this.bMap.Xstick.getRawAxis(2), this.bMap.Xstick.getRawAxis(5));
+       //double spd = 0.5;
+       this.bMap.Drive.TeleopDrive(this.bMap.Xstick.getRawAxis(1), this.bMap.Xstick.getRawAxis(4));
+       //this.bMap.intake.up();
+       //this.bMap.intake.stop();
        if(this.bMap.Xstick.getRawButton(1)){
            //intaking
            this.bMap.hopper.setState(State.Intake);
@@ -41,12 +44,12 @@ public class MasterControl {
        else if(this.bMap.Xstick.getRawButton(3)){
            //shooting
            this.bMap.shooter.set(rpm);
+           //this.bMap.shooter.setspd(spd);
            if(this.bMap.shooter.ready(rpm)){
                this.bMap.hopper.setState(State.Shooting);
            } else {
                this.bMap.hopper.setState(State.Idle);
            }
-           this.bMap.hopper.setState(State.Shooting);
            this.bMap.intake.up();
            this.bMap.intake.stop();
        } else{
