@@ -9,6 +9,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.subsystems.Drivetrain;
+
 /**
  * Add your docs here.
  */
@@ -16,11 +17,13 @@ public class RobotMap {
     public XboxController Xstick;
     public Drivetrain Drive;
     public Hopper hopper;
+    public Intake intake;
 
     public RobotMap(){
         this.Xstick = new XboxController(0);
         this.Drive = new Drivetrain();
         this.hopper = new Hopper();
+        this.intake = new Intake();
     }
 
 }

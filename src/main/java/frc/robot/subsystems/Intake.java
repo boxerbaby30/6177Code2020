@@ -19,10 +19,10 @@ import ControlUtil.MasterControl;
 public class Intake {
   private WPI_TalonSRX inMotor;
   private DoubleSolenoid pumpThing;
-  private State state;
+  private State1 state;
   public boolean running;
   
-  public enum State {Intaking, Outtaking, Idle};
+  public enum State1 {Intaking, Outtaking, Idle};
 
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
@@ -32,10 +32,10 @@ public class Intake {
     DoubleSolenoid pumpThing = new DoubleSolenoid(1, 2);
     this.pumpThing.set(Value.kForward);
     inMotor.setInverted(false);
-    state = State.Idle;
+    state = State1.Idle;
 
   }
-  public synchronized void setState(State s) {
+  public synchronized void setState(State1 s) {
     this.state = s;
   }
 
@@ -56,16 +56,16 @@ public class Intake {
   }
 
   public void run() {
-    State s = State.Idle;
+    State1 s = State1.Idle;
     while(true) {
       if (RobotState.isEnabled()) {
-        if (s == State.Intaking) {
+        if (s == State1.Intaking) {
           System.out.println("Intaking Claw");
           ExtendClaw();
           if (running == true) {
             inClaw();
           }
-        } else if (s == State.Outtaking) {
+        } else if (s == State1.Outtaking) {
           retractClaw();
         } else {
           System.out.println("Idle");

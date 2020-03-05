@@ -7,7 +7,7 @@
 
 package ControlUtil;
 
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Intake.State1;
 import frc.robot.subsystems.RobotMap;
 import frc.robot.subsystems.Hopper.State;
 
@@ -23,7 +23,6 @@ public class MasterControl {
    }
    
    public void Teleop() {
-       Intake in = new Intake();
        //this.bMap.Drive.TeleopDrive(this.bMap.Xstick.getRawAxis(2), this.bMap.Xstick.getRawAxis(5));
        if(this.bMap.Xstick.getRawButton(1)){
            //intaking
@@ -37,13 +36,14 @@ public class MasterControl {
            //shooting
            this.bMap.hopper.setState(State.Shooting);
        } else if (this.bMap.Xstick.getRawButton(4)) {
-           in.setState(State.Intaking);
+           this.bMap.intake.setState(State1.Intaking);
            if (this.bMap.Xstick.getRawButton(5)) {
-               in.running = true;
+               this.bMap.intake.running = true;
            }
        }
-       else{
+       else {
            this.bMap.hopper.setState(State.Idle);
+           this.bMap.intake.setState(State1.Idle);
        }
    }
 }
