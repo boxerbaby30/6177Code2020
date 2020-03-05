@@ -54,6 +54,7 @@ public class Robot extends TimedRobot {
     control.Teleop();
     bMap.hopper.printTelemtry();
     bMap.shooter.printTelemetry();
+    bMap.vision.printTelemetry();
   }
 
   @Override

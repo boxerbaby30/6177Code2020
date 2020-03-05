@@ -22,9 +22,9 @@ public class MasterControl {
    }
    
    public void Teleop() {
-       double rpm = 3000;
+       double rpm = 3800;
        //double spd = 0.5;
-       this.bMap.Drive.TeleopDrive(this.bMap.Xstick.getRawAxis(1), this.bMap.Xstick.getRawAxis(4));
+       //this.bMap.Drive.TeleopDrive(this.bMap.Xstick.getRawAxis(1), this.bMap.Xstick.getRawAxis(4));
        //this.bMap.intake.up();
        //this.bMap.intake.stop();
        if(this.bMap.Xstick.getRawButton(1)){

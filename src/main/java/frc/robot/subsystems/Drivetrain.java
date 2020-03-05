@@ -12,7 +12,10 @@ import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import com.kauailabs.navx.frc.AHRS;
 
 /**
  * Add your docs here.
@@ -22,6 +25,7 @@ public class Drivetrain {
     private CANSparkMax leftMaster, rightMaster, leftFollower, rightFollower;
     private CANPIDController leftPID, rightPID;
     private CANEncoder leftEncoder, rightEncoder;
+    private AHRS navx;
 
     private double lP, lI, lD, lF, lIzone;
     private double rP, rI, rD, rF, rIzone;
@@ -103,6 +107,10 @@ public class Drivetrain {
         rightPID.setSmartMotionMinOutputVelocity(kMinVel, smartMotionSlot);
         rightPID.setSmartMotionMaxAccel(kMaxAcc, smartMotionSlot);
         rightPID.setSmartMotionAllowedClosedLoopError(allowedErr, smartMotionSlot);
+
+        //navx = new AHRS(SPI.Port.kMXP);
+        //navx.calibrate();
+        //navx.zeroYaw();
     }
 
     public void TeleopDrive(double xSpeed, double zRotation) {
@@ -113,10 +121,13 @@ public class Drivetrain {
         leftPID.setReference(left, ControlType.kDutyCycle);
         rightPID.setReference(right, ControlType.kDutyCycle);
     }
+    public void aim(double theta){
+    }
     public double getLeftVel(){ return(leftEncoder.getVelocity()); }
     public double getRightVel(){ return(rightEncoder.getVelocity()); }
     public double getLeftDist(){ return(leftEncoder.getPosition()); }
     public double getRightDist(){ return(rightEncoder.getPosition()); }
+    public double getAngle(){ return(navx.getFusedHeading()); }
     public void printTelemetry(){
         SmartDashboard.putNumber("Left Drivetrain Velocity", getLeftVel());
         SmartDashboard.putNumber("Right Drivetrain Velocity", getRightVel());

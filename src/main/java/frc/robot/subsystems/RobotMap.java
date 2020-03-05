@@ -18,6 +18,7 @@ public class RobotMap {
     public Hopper hopper;
     public Intake intake;
     public Shooter shooter;
+    public Vision vision;
 
     public RobotMap(){
         this.Xstick = new XboxController(0);
@@ -25,6 +26,7 @@ public class RobotMap {
         this.hopper = new Hopper();
         this.intake = new Intake();
         this.shooter = new Shooter();
+        this.vision = new Vision();
     }
 
 }

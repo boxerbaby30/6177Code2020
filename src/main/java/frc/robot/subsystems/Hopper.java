@@ -45,7 +45,7 @@ public class Hopper extends Thread{
         topEnc = new DutyCycleEncoder(0);
         bottomEnc = new DutyCycleEncoder(1);
         entrance = new DigitalInput(2);
-        exit = new DigitalInput(3);
+        //exit = new DigitalInput(3);
 
         ballCounter = 0;
         state = State.Idle;
@@ -94,12 +94,12 @@ public class Hopper extends Thread{
         resetDistance();
     }
     public boolean isFull(){
-        boolean full = entrance.get() && exit.get();
+        boolean full = entrance.get() /*&& exit.get()*/;
         if(full){ ballCounter = 5; }
         return(full);
     }
     public boolean isEmpty(){
-        return (!entrance.get() && !exit.get() && ballCounter == 0);
+        return (!entrance.get() /*&& !exit.get()*/ && ballCounter == 0);
     }
     public void run(){
         State s = State.Idle;
@@ -109,21 +109,21 @@ public class Hopper extends Thread{
                     synchronized(this){ s = this.state; }
                 }
                 SmartDashboard.putString("State", s.toString());
-                if(!exit.get() && s == State.Intake){
+                if(/*!exit.get() &&*/ s == State.Intake){
                     System.out.println("intaking");
                     if(entrance.get()){activate();}
                     roller.set(ControlMode.PercentOutput, 0.5);
-                    increment(0.25, 5.5);
+                    increment(0.25, 6.5);
                 } else if((ballCounter > 0 || entrance.get()) && s == State.Outtake){
                     System.out.println("outtaking");
                     activate();
                     roller.set(ControlMode.PercentOutput, -0.5);
-                    decrement(-0.25, 5.5);
-                } else if(ballCounter > 0 && s == State.Shooting){
+                    decrement(-0.25, 6.5);
+                } else if(/*ballCounter > 0 &&*/ s == State.Shooting){
                     System.out.println("shooting");
                     roller.set(ControlMode.PercentOutput, 0.5);
                     activate();
-                    decrement(0.25, 5.5);
+                    decrement(0.25, 6.5);
                 } else {
                     roller.set(ControlMode.PercentOutput, 0);
                     System.out.println("idle");
