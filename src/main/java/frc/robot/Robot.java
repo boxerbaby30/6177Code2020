@@ -9,7 +9,10 @@ package frc.robot;
 
 import ControlUtil.MasterControl;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import frc.robot.subsystems.RobotMap;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.subsystems.Hopper.State;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -21,6 +24,7 @@ import frc.robot.subsystems.RobotMap;
 public class Robot extends TimedRobot {
   MasterControl control;
   RobotMap bMap;
+  boolean shoot = true;
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
@@ -43,6 +47,28 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
+    if(shoot){
+      double rpm = 3500;
+      double aimerr = 0;
+      this.bMap.shooter.set(rpm);
+      this.bMap.vision.lightOn(true);
+          //this.bMap.shooter.setspd(spd);
+      aimerr = 0.045 * this.bMap.vision.getAngle();
+      if(this.bMap.shooter.ready(rpm)){
+          if(Math.abs(this.bMap.vision.getAngle()) < 0.5){
+              SmartDashboard.putBoolean("On Point", true);
+              this.bMap.hopper.setState(State.Shooting);
+          } else {
+              System.out.println("\nShould see this!!!!!\n");
+          }
+      } else {
+          SmartDashboard.putBoolean("On Point", false);
+          this.bMap.hopper.setState(State.Idle);
+      }
+      this.bMap.intake.up();
+      this.bMap.intake.stop();
+      this.bMap.Drive.TeleopDrive(0, aimerr);
+    }
   }
 
   @Override

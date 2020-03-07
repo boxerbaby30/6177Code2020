@@ -13,6 +13,8 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import org.opencv.calib3d.StereoBM;
+
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.kauailabs.navx.frc.AHRS;
@@ -31,6 +33,7 @@ public class Drivetrain {
     private double rP, rI, rD, rF, rIzone;
     private double kMax, kMin;
     private double kMaxVel, kMinVel, kMaxAcc, allowedErr;
+    private double kP = 0.005, leftVal = 0, rightVal = 0;
     
     private int smartMotionSlot = 0;
     private double gearRatio = 12.755;
@@ -114,14 +117,20 @@ public class Drivetrain {
     }
 
     public void TeleopDrive(double xSpeed, double zRotation) {
+        xSpeed = Math.pow(xSpeed, 3);
+        zRotation = Math.pow(zRotation, 3);
         double left = xSpeed - zRotation;
         double right = zRotation + xSpeed;
+
         if(Math.abs(left) < 0.09){left = 0;}
         if(Math.abs(right) < 0.09){right = 0;}
-        leftPID.setReference(left, ControlType.kDutyCycle);
-        rightPID.setReference(right, ControlType.kDutyCycle);
+        leftPID.setReference(leftVal + left, ControlType.kDutyCycle);
+        rightPID.setReference(rightVal + right, ControlType.kDutyCycle);
     }
     public void aim(double theta){
+        double steeringAdjust = kP * theta;
+        leftVal += steeringAdjust;
+        rightVal -= steeringAdjust;
     }
     public double getLeftVel(){ return(leftEncoder.getVelocity()); }
     public double getRightVel(){ return(rightEncoder.getVelocity()); }

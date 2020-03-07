@@ -24,7 +24,7 @@ public class Shooter {
     private CANSparkMax master;
     private CANEncoder enc;
     private CANPIDController pid;
-    private final double err = 50;
+    private final double err = 100;
     private double kP = 0.011;
     private double kI = 0.0;
     private double kD = 0.0;
