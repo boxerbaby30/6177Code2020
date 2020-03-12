@@ -42,9 +42,9 @@ public class Hopper extends Thread{
         bottomBelt.setNeutralMode(NeutralMode.Brake);
         roller.setNeutralMode(NeutralMode.Brake);
 
-        topEnc = new DutyCycleEncoder(1);
-        bottomEnc = new DutyCycleEncoder(2);
-        entrance = new DigitalInput(3);
+        topEnc = new DutyCycleEncoder(0);
+        bottomEnc = new DutyCycleEncoder(1);
+        entrance = new DigitalInput(2);
 
         ballCounter = 0;
         state = State.Idle;

@@ -7,7 +7,6 @@
 
 package ControlUtil;
 
-import frc.robot.subsystems.Intake.State1;
 import frc.robot.subsystems.RobotMap;
 import frc.robot.subsystems.Hopper.State;
 
@@ -23,27 +22,40 @@ public class MasterControl {
    }
    
    public void Teleop() {
+       double rpm = 3000;
        //this.bMap.Drive.TeleopDrive(this.bMap.Xstick.getRawAxis(2), this.bMap.Xstick.getRawAxis(5));
        if(this.bMap.Xstick.getRawButton(1)){
            //intaking
            this.bMap.hopper.setState(State.Intake);
+           this.bMap.intake.down();
+           this.bMap.intake.in();
+           this.bMap.shooter.set(0);
        }
        else if(this.bMap.Xstick.getRawButton(2)){
            //outtaking
+           this.bMap.shooter.set(0);
            this.bMap.hopper.setState(State.Outtake);
+           this.bMap.intake.down();
+           this.bMap.intake.out();
        }
        else if(this.bMap.Xstick.getRawButton(3)){
            //shooting
-           this.bMap.hopper.setState(State.Shooting);
-       } else if (this.bMap.Xstick.getRawButton(4)) {
-           this.bMap.intake.setState(State1.Intaking);
-           if (this.bMap.Xstick.getRawButton(5)) {
-               this.bMap.intake.running = true;
+           this.bMap.shooter.set(rpm);
+           if(this.bMap.shooter.ready(rpm)){
+               this.bMap.hopper.setState(State.Shooting);
+           } else {
+               this.bMap.hopper.setState(State.Idle);
            }
-       }
-       else {
+           this.bMap.hopper.setState(State.Shooting);
+           this.bMap.intake.up();
+           this.bMap.intake.stop();
+       } else if (this.bMap.Xstick.getRawButton(6)) {
+           this.bMap.colorWheel.run();
+       } else {
+           this.bMap.shooter.set(0);
            this.bMap.hopper.setState(State.Idle);
-           this.bMap.intake.setState(State1.Idle);
+           this.bMap.intake.up();
+           this.bMap.intake.stop();
        }
    }
 }
